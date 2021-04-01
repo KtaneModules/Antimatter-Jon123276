@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 1b122f45df8fca44593726b8b7945a20
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Newsreader 7pt
+  fontNames:
+  - Newsreader 7pt
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 193a8e3e8e9964c4cb3942a623c518ff, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 39b0e47f70f2a9e4b88ea19ea548d6b9
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Newsreader 36pt
+  fontNames:
+  - Newsreader 36pt
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 017259f70b11b4841b8039bbb1bf49cb, type: 3}
+  - {fileID: 12800000, guid: 05a5e0cae57753f46b808cd18aa96538, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 3ae42c21cc09a744ea0b06ab4279164b
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Newsreader 72pt
+  fontNames:
+  - Newsreader 72pt
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 005fe1a35334c13418e335ec68680804, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: ba41b9489ae2b094d9f8416b541e5399
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Newsreader 28pt
+  fontNames:
+  - Newsreader 28pt
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 3d16cda25b2489e4b9c933238fff3ed3, type: 3}
+  - {fileID: 12800000, guid: 28d2d444f46b5174c94bde43aab47286, type: 3}
+  - {fileID: 12800000, guid: 00ea8eabc77392e458bb0aaf3316ef9d, type: 3}
+  - {fileID: 12800000, guid: b88be5fb50dc47945a893bec34d31fdb, type: 3}
+  - {fileID: 12800000, guid: b3777c8d3cfdb914d8e7735df3f2b8f9, type: 3}
+  - {fileID: 12800000, guid: 00a889ce273b65a459f1ea57a5f7f989, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
