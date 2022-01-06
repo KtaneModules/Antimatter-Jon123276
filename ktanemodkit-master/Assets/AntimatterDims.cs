@@ -29,11 +29,12 @@ public class AntimatterDims : MonoBehaviour {
     public MeshRenderer[] UpgradeColor;
     public TextMesh[] dimBoostText;
     public KMSelectable BuyDimBoost;
+	public KMSelectable buyMax;
     private static int moduleId = 0;
     double antimatter = 1.00E1;
-    double multiplier = 0;
+	double multiplier = 0E0;
     static double multiplierStuff = 0.1;
-    double[] numberOfDims = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	double[] numberOfDims = { 0E0, 0E0, 0E0, 0E0, 0E0, 0E0, 0E0, 0E0};
     bool[] isMax = { false, false, false, false, false, false, false, false, false }; // Dim1, Dim2, Dim3, Dim4, Dim5, Dim6, Dim7, Dim8, Ticks.
     float tickSpeed = 0.1f;
     int tickManager = 10;
@@ -47,9 +48,11 @@ public class AntimatterDims : MonoBehaviour {
     int upgradeSixValid = 0;
     double[] priceOf = { 1.00E1, 1.00E2, 1.00E4, 1.00E6, 1.00E9, 1.00E13, 1.00E18, 1.00E24 };
     double[] priceOfDims = { 1.00E1, 1.00E2, 1.00E4, 1.00E6, 1.00E9, 1.00E13, 1.00E18, 1.00E24 };
-    int[] Multipliers = new int[8] {1, 1, 1, 1, 1, 1, 1, 1};
+	double[] priceOfDimsx10 = { 1.00E2, 1.00E3, 1.00E5, 1.00E7, 1.00E10, 1.00E14, 1.00E19, 1.00E25 }; // Only used for buy max.
+    double[] Multipliers = new double[8] {1, 1, 1, 1, 1, 1, 1, 1};
     double tickPrice = 1.00E3;
-    int[] UpgradeCount = new int[8];
+    double[] UpgradeCount = new double[8];
+	bool buyMaxToggle = false;
 	DimBoosting boost = new DimBoosting();
 	private static readonly Vector3 underModule = new Vector3(0, -0.0061f, 0), overModule = new Vector3(0, 0, 0);
 	#region mainObject
@@ -67,19 +70,19 @@ public class AntimatterDims : MonoBehaviour {
             tickManager++;
             if (tickManager >= 10)
             {
-                numberOfDims[0] += numberOfDims[1] * Multipliers[1] * (1 + ((boost.getAmount()) * 10)) * (1 + (upgradeThreeValid * numberOfDims[7])) * (1 + (antimatter % 1.00E20 * upgradeFourValid) * (1 + (upgradeFiveValid * 10)));
-                numberOfDims[1] += numberOfDims[2] * Multipliers[2] * (1 + ((boost.getAmount()) * 10));
-                numberOfDims[2] += numberOfDims[3] * Multipliers[3] * (1 + ((boost.getAmount()) * 10));
-                numberOfDims[3] += numberOfDims[4] * Multipliers[4] * (1 + ((boost.getAmount()) * 10));
-                numberOfDims[4] += numberOfDims[5] * Multipliers[5] * (1 + ((boost.getAmount()) * 10));
-                numberOfDims[5] += numberOfDims[6] * Multipliers[6] * (1 + ((boost.getAmount()) * (10 * (1 + (10 * upgradeSixValid)))));
-                numberOfDims[6] += numberOfDims[7] * Multipliers[7] * eighthDimMulti * (1 + (boost.getAmount() * 100));
+                numberOfDims[0] += numberOfDims[1] * Multipliers[1] * ((boost.getAmount()) * 1000) * (1 + (upgradeThreeValid * numberOfDims[7])) * (1 + (antimatter % 1.00E20 * upgradeFourValid) * (1 + (upgradeFiveValid * 10)));
+                numberOfDims[1] += numberOfDims[2] * Multipliers[2] * ((boost.getAmount()) * 1000);
+                numberOfDims[2] += numberOfDims[3] * Multipliers[3] * ((boost.getAmount()) * 1000);
+                numberOfDims[3] += numberOfDims[4] * Multipliers[4] * ((boost.getAmount()) * 1000);
+                numberOfDims[4] += numberOfDims[5] * Multipliers[5] * ((boost.getAmount()) * 1000);
+				numberOfDims[5] += numberOfDims[6] * Multipliers[6] * ((boost.getAmount()*1000) * (10 * (1 + (10 * upgradeSixValid))));
+                numberOfDims[6] += numberOfDims[7] * Multipliers[7] * eighthDimMulti * (boost.getAmount() * 1000);
                 tickManager = 0;
             }
             tickpricebutitstext.text = tickPrice.ToString("E0");
             for (int i = 0; i < amounts.Length; i++) {
 				amounts[i].text = numberOfDims [i].ToString("E2");
-                multis[i].text = "(                     x" + Multipliers[i].ToString() + ".0)";
+				multis[i].text = "(                     x" + Multipliers[i].ToString("E0") + ")";
                 singleprices[i].text = priceOfDims[i].ToString("E0");
                 until10[i].text = (priceOfDims[i] * (10 - UpgradeCount[i])).ToString("E0");
                 if (double.Parse (amounts [i].text) == 1.7E308)
@@ -316,13 +319,13 @@ public class AntimatterDims : MonoBehaviour {
 		dims [5].OnInteract += delegate() {
             if (MainIsOn)
                 if (!isMax[5] && antimatter >= priceOfDims[5] * (10 - UpgradeCount[5]))
-            {
-                numberOfDims[5] += 10 - UpgradeCount[5];
-                antimatter = antimatter - priceOfDims[5] * (10 - UpgradeCount[5]);
-                Multipliers[5] = Multipliers[5] * 2;
-                UpgradeCount[5] = 0;
-                priceOfDims[5] = priceOfDims[5] * 1.00E10;
-            }
+            	{
+                	numberOfDims[5] += 10 - UpgradeCount[5];
+                	antimatter = antimatter - priceOfDims[5] * (10 - UpgradeCount[5]);
+                	Multipliers[5] = Multipliers[5] * 2;
+                	UpgradeCount[5] = 0;
+                	priceOfDims[5] = priceOfDims[5] * 1.00E10;
+            	}
 			return false;
 		};
 		dims [6].OnInteract += delegate() {
@@ -351,7 +354,7 @@ public class AntimatterDims : MonoBehaviour {
 		};
 		tickspeed.OnInteract += delegate() {
             if (MainIsOn)
-                if (!isMax[8] && antimatter >= tickPrice) { tickSpeed /= 1.5f; antimatter = antimatter - tickPrice; tickPrice = tickPrice * 10; }
+                if (!isMax[8] && antimatter >= tickPrice) { tickSpeed /= 100f; antimatter = antimatter - tickPrice; tickPrice = tickPrice * 10; }
 			return false;
 		};
 		Upgrades[0].OnInteract += delegate() {
@@ -400,7 +403,7 @@ public class AntimatterDims : MonoBehaviour {
                     multis[i].text = "(                     x1.0)";
                 }
                     boost.priceChange();
-				dimBoostText[0].text = boost.getAmount().ToString();
+				dimBoostText[0].text = boost.getAmount().ToString("E2");
 				dimBoostText[1].text = boost.getPrice().ToString("E2");
 				antimatter = 1.00E1;
                 tickSpeed = 0.1f;
@@ -408,7 +411,18 @@ public class AntimatterDims : MonoBehaviour {
                 multiplier = 0;
 				multiplierStuff = 0.1;
                 for (int i = 0; i < numberOfDims.Length; i++){numberOfDims[i]=0; priceOfDims[i]=priceOf[i];}
-
+				Debug.LogFormat("Number of dim boosts: {0}", boost.getAmount());
+			}
+			return false;
+		};
+		buyMax.OnInteract += delegate() {
+			if (MainIsOn){
+				double highestPrice = priceOfDimsx10.Max();
+				while (antimatter >= highestPrice){
+					for (int i = 0; i < 8; ++i){
+						dims[i].OnInteract();
+					}
+				}
 			}
 			return false;
 		};
@@ -475,20 +489,23 @@ public class AntimatterDims : MonoBehaviour {
 	#endregion
 	#region DimBoosting
 	class DimBoosting{
-		public DimBoosting(){amountOfDimBoost=0; price=1.00E20;}
+		public DimBoosting(){amountOfDimBoost=1E0; price=1.00E20;}
 		public DimBoosting(int data){this.data = data;}
-		public void changeAmount(){amountOfDimBoost++;}
+		public void changeAmount(){amountOfDimBoost *= 1000;}
 		public void priceChange(){price*=((amountOfDimBoost+1)*100);}
-		public int getAmount(){return amountOfDimBoost;}
+		public double getAmount(){return amountOfDimBoost;}
 		public double getPrice(){return price;}
-		private int amountOfDimBoost;
+
+		[SerializeField]
+		private double amountOfDimBoost;
+
 		private double price;
 		// Ignore this bit.
 		private int data; // 0;
 	};
 	/*
 	DimBoosting boost = new DimBoosting();
-	boost.getAmount(); // returns 0
+	boost.getAmount(); // returns 0ich
 	DimBoosting newBoost = new DimBoosting();
 	newBoost.getAmount(); // 0;
 	boost.amountOfDimBoost = 2;
@@ -497,7 +514,7 @@ public class AntimatterDims : MonoBehaviour {
 	*/
 	#endregion
 	#pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} dim [1-9] (Presses the dimension you want.) | !{0} tick (Presses the tickspeed button) | These first two are only valid if you are on the main game section of the module.";
+	private readonly string TwitchHelpMessage = @"!{0} dim [1-8] (temp #) (Presses the single dimension you want a # of times.) | !{0} dimx10 [1-8] (temp #) (Presses the x10 button of the dimension given a # of times.) | !{0} tick (Presses the tickspeed button) | These first two are only valid if you are on the main game section of the module. | !{0} change (presses the button on the bottom to change the screen) | !{0} upgrade [1-8] (presses the upgrade from 1 to 8, and must be on the upgrade screen) | !{0} boost (presses the boost button, must be on the dim boost page)";
 #pragma warning restore 414
     IEnumerator ProcessTwitchCommand(string command)
     {
@@ -505,27 +522,50 @@ public class AntimatterDims : MonoBehaviour {
         if (Regex.IsMatch(parameters[0], @"^\s*Dim|tick\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {   
             yield return null;
-            if (parameters.Length < 2 && !Regex.IsMatch(parameters[0], @"^\s*tick\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
-            {
-                yield return "sendtochaterror Please specify what number you would like to press!";
-            }
-            else if (parameters.Length > 2)
-            {
-                yield return "sendtochaterror Too many arguements!";
-            }
-            else if (!MainIsOn)
-            {
+			int l = parameters.Length;
+			if (l < 2 && !Regex.IsMatch (parameters [0], @"^\s*tick\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)) {
+				yield return "sendtochaterror Please specify what number you would like to press!";
+			} else if (l > 3) {
+				yield return "sendtochaterror Too many arguements!";
+			} else if (!MainIsOn) {
 				yield return "sendtochaterror You must be on the main game to press a Dimension.";
-            }
-			else if (parameters[0] == "dim")
-			{
+			} else if (parameters [0] == "dim") {
 				int j = 0;
-				int.TryParse(parameters[1], out j);
-				if (j >= 1 && j <= 8) dims[j-1].OnInteract();
-				else yield return "sendtochaterror Either too small or too large!";
+				int.TryParse (parameters [1], out j);
+				if (j >= 1 && j <= 8) {
+					if (l == 2)
+						singledims [j - 1].OnInteract ();
+					else {
+						int k = 0;
+						int.TryParse (parameters [2], out k);
+						for (int i = 0; i < k; i++) {
+							singledims [j - 1].OnInteract ();
+						}
+					}
+				}
+				else
+					yield return "sendtochaterror Either too small or too large!";
+			} else if (parameters [0] == "dimx10") {
+				int j = 0;
+				int.TryParse (parameters [1], out j);
+				if (j >= 1 && j <= 8)
+				if (l == 2)
+					dims [j - 1].OnInteract ();
+				else {
+					int k = 0;
+					int.TryParse (parameters [2], out k);
+					for (int i = 0; i < k; i++) {
+						dims [j - 1].OnInteract ();
+					}
+				}
+				else
+					yield return "sendtochaterror Either too small or too large!";
 			}
 			else{
-				tickspeed.OnInteract();
+				int j = 0;
+				int.TryParse (parameters [1], out j);
+				for (int i = 0; i < j; i++)
+					tickspeed.OnInteract();
 			}
         }
 		else if (Regex.IsMatch(parameters[0], @"^\s*change\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)){
