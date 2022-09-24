@@ -12,7 +12,7 @@ public class AntimatterDims : MonoBehaviour {
     public KMAudio Audio;
     public KMBombInfo bomb;
     public TextMesh text;
-    public KMSelectable[] dims;
+    public KMSelectable[] dims ;
     public KMSelectable[] singledims;
     public TextMesh[] singleprices;
     public TextMesh[] until10;
@@ -30,6 +30,7 @@ public class AntimatterDims : MonoBehaviour {
     public TextMesh[] dimBoostText;
     public KMSelectable BuyDimBoost;
 	public KMSelectable buyMax;
+    public KMSelectable tickMax;
     private static int moduleId = 0;
     double antimatter = 1.00E1;
 	double multiplier = 0E0;
@@ -71,7 +72,7 @@ public class AntimatterDims : MonoBehaviour {
             tickManager++;
             if (tickManager >= 10)
             {
-                numberOfDims[0] += numberOfDims[1] * Multipliers[1] * ((boost.getAmount()) * 1000) * (1 + (upgradeThreeValid * numberOfDims[7])) * (1 + (antimatter % 1.00E20 * upgradeFourValid) * (1 + (upgradeFiveValid * 10)));
+                numberOfDims[0] += numberOfDims[1] * Multipliers[1] * ((boost.getAmount()) * 1000) * (1 + (upgradeThreeValid * numberOfDims[7])) * (1 + (antimatter % 1.00E20 * upgradeFourValid));
                 numberOfDims[1] += numberOfDims[2] * Multipliers[2] * ((boost.getAmount()) * 1000);
                 numberOfDims[2] += numberOfDims[3] * Multipliers[3] * ((boost.getAmount()) * 1000);
                 numberOfDims[3] += numberOfDims[4] * Multipliers[4] * ((boost.getAmount()) * 1000);
@@ -99,7 +100,7 @@ public class AntimatterDims : MonoBehaviour {
 		dimBoostText[0].text = boost.getAmount().ToString();
 		dimBoostText[1].text = boost.getPrice().ToString("E2");
 	}
-    bool single(int i){
+    void single(int i){
         if (MainIsOn){
             if (!isMax[i] && antimatter >= priceOfDims[i])
             {
@@ -113,9 +114,20 @@ public class AntimatterDims : MonoBehaviour {
                     priceOfDims[i] = priceOfDims[i] * 1.00E3;
                 }
             }
-            return false;
         }
-        return false;
+    }
+    void multi(int i)
+    {
+        if (MainIsOn) { 
+            if (!isMax[i] && antimatter >= priceOfDims[i] * (10 - UpgradeCount[i]))
+            {
+                numberOfDims[i] += 10 - UpgradeCount[i];
+                antimatter = antimatter - priceOfDims[i] * (10 - UpgradeCount[i]);
+                Multipliers[i] = Multipliers[i] * 2;
+                UpgradeCount[i] = 0;
+                priceOfDims[i] = priceOfDims[i] * 1.00E3;
+            }
+        }
     }
 	void Start(){
 		StartCoroutine(antimatterGainer());
@@ -147,23 +159,76 @@ public class AntimatterDims : MonoBehaviour {
 			}
 			return false;
 		};
-        for (int i = 0; i < 8; i++){
-            singledims[i].OnInteract += delegate () {
-                return single(i);
-            };
-            dims [i].OnInteract += delegate() {
-                if (MainIsOn)
-                    if (!isMax[i] && antimatter >= priceOfDims[i] * (10 - UpgradeCount[i]))
-                {
-                    numberOfDims[i] += 10 - UpgradeCount[i];
-                    antimatter = antimatter - priceOfDims[i] * (10 - UpgradeCount[i]);
-                    Multipliers[i] = Multipliers[i] * 2;
-                    UpgradeCount[i] = 0;
-                    priceOfDims[i] = priceOfDims[i] * 1.00E3;
-                }
-		    	return false;
-		    };
-        }
+        #region Dims
+        #region Single Dims 
+        singledims[0].OnInteract += delegate () {
+            single(0);
+            return false;
+        };
+        singledims[1].OnInteract += delegate () {
+            single(1);
+            return false;
+        };
+        singledims[2].OnInteract += delegate () {
+            single(2);
+            return false;
+        };
+        singledims[3].OnInteract += delegate () {
+            single(3);
+            return false;
+        };
+        singledims[4].OnInteract += delegate () {
+            single(4);
+            return false;
+        };
+        singledims[5].OnInteract += delegate () {
+            single(5);
+            return false;
+        };
+        singledims[6].OnInteract += delegate () {
+            single(6);
+            return false;
+        };
+        singledims[7].OnInteract += delegate () {
+            single(7);
+            return false;
+        };
+        #endregion
+        #region Multiple Dims
+        dims[0].OnInteract += delegate() {
+            multi(0);
+            return false;
+		};
+        dims[1].OnInteract += delegate () {
+            multi(1);
+            return false;
+        };
+        dims[2].OnInteract += delegate () {
+            multi(2);
+            return false;
+        };
+        dims[3].OnInteract += delegate () {
+            multi(3);
+            return false;
+        };
+        dims[4].OnInteract += delegate () {
+            multi(4);
+            return false;
+        };
+        dims[5].OnInteract += delegate () {
+            multi(5);
+            return false;
+        };
+        dims[6].OnInteract += delegate () {
+            multi(6);
+            return false;
+        };
+        dims[7].OnInteract += delegate () {
+            multi(7);
+            return false;
+        };
+        #endregion
+        #endregion
         #region CommentedOutStuff
         // singledims[1].OnInteract += delegate () {
         //     if (MainIsOn)
@@ -277,7 +342,7 @@ public class AntimatterDims : MonoBehaviour {
         //     }
         //     return false;
         // };
-		// dims [1].OnInteract += delegate() {
+        // dims [1].OnInteract += delegate() {
         //     if (MainIsOn)
         //         if (!isMax[1] && antimatter >= priceOfDims[1] * (10 - UpgradeCount[1]))
         //     {
@@ -287,9 +352,9 @@ public class AntimatterDims : MonoBehaviour {
         //         UpgradeCount[1] = 0;
         //         priceOfDims[1] = priceOfDims[1] * 1.00E4;
         //     }
-		// 	return false;
-		// };
-		// dims [2].OnInteract += delegate() {
+        // 	return false;
+        // };
+        // dims [2].OnInteract += delegate() {
         //     if (MainIsOn)
         //         if (!isMax[2] && antimatter >= priceOfDims[2] * (10 - UpgradeCount[2]))
         //     {
@@ -299,9 +364,9 @@ public class AntimatterDims : MonoBehaviour {
         //         UpgradeCount[2] = 0;
         //         priceOfDims[2] = priceOfDims[2] * 1.00E5;
         //     }
-		// 	return false;
-		// };
-		// dims [3].OnInteract += delegate() {
+        // 	return false;
+        // };
+        // dims [3].OnInteract += delegate() {
         //     if (MainIsOn)
         //         if (!isMax[3] && antimatter >= priceOfDims[3] * (10 - UpgradeCount[3]))
         //     {
@@ -311,9 +376,9 @@ public class AntimatterDims : MonoBehaviour {
         //         UpgradeCount[3] = 0;
         //         priceOfDims[3] = priceOfDims[3] * 1.00E6;
         //     }
-		// 	return false;
-		// };
-		// dims [4].OnInteract += delegate() {
+        // 	return false;
+        // };
+        // dims [4].OnInteract += delegate() {
         //     if (MainIsOn)
         //         if (!isMax[4] && antimatter >= priceOfDims[4] * (10 - UpgradeCount[4]))
         //     {
@@ -323,9 +388,9 @@ public class AntimatterDims : MonoBehaviour {
         //         UpgradeCount[4] = 0;
         //         priceOfDims[4] = priceOfDims[4] * 1.00E8;
         //     }
-		// 	return false;
-		// };
-		// dims [5].OnInteract += delegate() {
+        // 	return false;
+        // };
+        // dims [5].OnInteract += delegate() {
         //     if (MainIsOn)
         //         if (!isMax[5] && antimatter >= priceOfDims[5] * (10 - UpgradeCount[5]))
         //     	{
@@ -335,9 +400,9 @@ public class AntimatterDims : MonoBehaviour {
         //         	UpgradeCount[5] = 0;
         //         	priceOfDims[5] = priceOfDims[5] * 1.00E10;
         //     	}
-		// 	return false;
-		// };
-		// dims [6].OnInteract += delegate() {
+        // 	return false;
+        // };
+        // dims [6].OnInteract += delegate() {
         //     if (MainIsOn)
         //         if (!isMax[6] && antimatter >= priceOfDims[6] * (10 - UpgradeCount[6]))
         //     {
@@ -347,9 +412,9 @@ public class AntimatterDims : MonoBehaviour {
         //         UpgradeCount[6] = 0;
         //         priceOfDims[6] = priceOfDims[6] * 1.00E12;
         //     }
-		// 	return false;
-		// };
-		// dims [7].OnInteract += delegate() {
+        // 	return false;
+        // };
+        // dims [7].OnInteract += delegate() {
         //     if (MainIsOn)
         //         if (!isMax[7] && antimatter >= priceOfDims[7] * (10 - UpgradeCount[7]))
         //     {
@@ -359,10 +424,10 @@ public class AntimatterDims : MonoBehaviour {
         //         UpgradeCount[7] = 0;
         //         priceOfDims[7] = priceOfDims[7] * 1.00E15;
         //     }
-		// 	return false;
-		// };
+        // 	return false;
+        // };
         #endregion
-		tickspeed.OnInteract += delegate() {
+        tickspeed.OnInteract += delegate() {
             if (MainIsOn)
                 if (!isMax[8] && antimatter >= tickPrice) { tickSpeed /= 100f; antimatter = antimatter - tickPrice; tickPrice = tickPrice * 10; }
 			return false;
@@ -416,6 +481,7 @@ public class AntimatterDims : MonoBehaviour {
 				dimBoostText[0].text = boost.getAmount().ToString("E2");
 				dimBoostText[1].text = boost.getPrice().ToString("E2");
 				antimatter = 1.00E1;
+                    if (upgradeFiveValid == 1) antimatter = 1.00E20;
                 tickSpeed = 0.1f;
                 tickPrice = 1.00E3;
                 multiplier = 0;
@@ -427,15 +493,23 @@ public class AntimatterDims : MonoBehaviour {
 		};
 		buyMax.OnInteract += delegate() {
 			if (MainIsOn){
-				double highestPrice = priceOfDimsx10.Max();
-				while (antimatter >= highestPrice){
-					for (int i = 0; i < 8; ++i){
-						dims[i].OnInteract();
-					}
+				for (int i = 0; i < 8; ++i){
+					dims[i].OnInteract();
 				}
 			}
 			return false;
 		};
+        tickMax.OnInteract += delegate ()
+        {
+            if (MainIsOn)
+            {
+                while (tickPrice <= antimatter)
+                {
+                    tickspeed.OnInteract();
+                }
+            }
+            return false;
+        };
 	}
 	#endregion
 	#region Upgrades
@@ -475,8 +549,8 @@ public class AntimatterDims : MonoBehaviour {
 	/// Implements the 5th upgrade button when you press the switch button.
 	/// </summary>
 	void Upgrade5(){
-		upgradeFiveValid = 1;
 		UpgradeColor[4].material.color = new Color32(0, 75, 0, 255);
+        upgradeFiveValid = 1;
 		isDone[4] = true;
 	}
 	/// <summary>
@@ -524,22 +598,22 @@ public class AntimatterDims : MonoBehaviour {
 	*/
 	#endregion
 	#pragma warning disable 414
-	private readonly string TwitchHelpMessage = @"!{0} dim [1-8] (temp #) (Presses the single dimension you want a # of times.) | !{0} dimx10 [1-8] (temp #) (Presses the x10 button of the dimension given a # of times.) | !{0} tick (Presses the tickspeed button) | These first two are only valid if you are on the main game section of the module. | !{0} change (presses the button on the bottom to change the screen) | !{0} upgrade [1-8] (presses the upgrade from 1 to 8, and must be on the upgrade screen) | !{0} boost (presses the boost button, must be on the dim boost page)";
+	private readonly string TwitchHelpMessage = @"!{0} dim [1-8] (temp #) (Presses the single dimension you want a # of times.) | !{0} dimx10 [1-8] (temp #) (Presses the x10 button of the dimension given a # of times.) | !{0} tick # (Presses the tickspeed button) | !{0} buyMax # (Presses the BuyMax button for Dimensions.) | !{0} maxTick # (Presses the BuyMax button for Tickspeed) | These first five are only valid if you are on the main game section of the module. | !{0} change (presses the button on the bottom to change the screen) | !{0} upgrade [1-8] (presses the upgrade from 1 to 8, and must be on the upgrade screen) | !{0} boost (presses the boost button, must be on the dim boost page)";
 #pragma warning restore 414
     IEnumerator ProcessTwitchCommand(string command)
     {
         string[] parameters = command.Split(' ');
-        if (Regex.IsMatch(parameters[0], @"^\s*Dim|tick\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        if (Regex.IsMatch(parameters[0], @"^\s*Dim|tick|buyMax|buyTick\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {   
             yield return null;
 			int l = parameters.Length;
-			if (l < 2 && !Regex.IsMatch (parameters [0], @"^\s*tick\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)) {
+			if (l < 2) {
 				yield return "sendtochaterror Please specify what number you would like to press!";
 			} else if (l > 3) {
 				yield return "sendtochaterror Too many arguements!";
 			} else if (!MainIsOn) {
 				yield return "sendtochaterror You must be on the main game to press a Dimension.";
-			} else if (parameters [0] == "dim") {
+			} else if (parameters [0].EqualsIgnoreCase("dim")) {
 				int j = 0;
 				int.TryParse (parameters [1], out j);
 				if (j >= 1 && j <= 8) {
@@ -555,7 +629,7 @@ public class AntimatterDims : MonoBehaviour {
 				}
 				else
 					yield return "sendtochaterror Either too small or too large!";
-			} else if (parameters [0] == "dimx10") {
+			} else if (parameters [0].EqualsIgnoreCase("dimx10")) {
 				int j = 0;
 				int.TryParse (parameters [1], out j);
 				if (j >= 1 && j <= 8)
@@ -571,12 +645,26 @@ public class AntimatterDims : MonoBehaviour {
 				else
 					yield return "sendtochaterror Either too small or too large!";
 			}
-			else{
+			else if (parameters[0].EqualsIgnoreCase("tick")){
 				int j = 0;
 				int.TryParse (parameters [1], out j);
 				for (int i = 0; i < j; i++)
 					tickspeed.OnInteract();
 			}
+            else if (parameters[0].EqualsIgnoreCase("buyMax"))
+            {
+                int j = 0;
+                int.TryParse(parameters[1], out j);
+                for (int i = 0; i < j; i++)
+                    buyMax.OnInteract();
+            }
+            else
+            {
+                int j = 0;
+                int.TryParse(parameters[1], out j);
+                for (int i = 0; i < j; i++)
+                    tickMax.OnInteract();
+            }
         }
 		else if (Regex.IsMatch(parameters[0], @"^\s*change\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)){
 			yield return null;
