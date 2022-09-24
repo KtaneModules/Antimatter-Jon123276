@@ -598,13 +598,13 @@ public class AntimatterDims : MonoBehaviour {
 	*/
 	#endregion
 	#pragma warning disable 414
-	private readonly string TwitchHelpMessage = @"!{0} dim [1-8] (temp #) (Presses the single dimension you want a # of times.) | !{0} dimx10 [1-8] (temp #) (Presses the x10 button of the dimension given a # of times.) | !{0} tick # (Presses the tickspeed button) | !{0} buyMax # (Presses the BuyMax button for Dimensions.) | !{0} maxTick # (Presses the BuyMax button for Tickspeed) | These first five are only valid if you are on the main game section of the module. | !{0} change (presses the button on the bottom to change the screen) | !{0} upgrade [1-8] (presses the upgrade from 1 to 8, and must be on the upgrade screen) | !{0} boost (presses the boost button, must be on the dim boost page)";
+	private readonly string TwitchHelpMessage = @"!{0} dim [1-8] (temp #) (Presses the single dimension you want a # of times.) | !{0} dimx10 [1-8] (temp #) (Presses the x10 button of the dimension given a # of times.) | !{0} tick # (Presses the tickspeed button.) | !{0} buyMax # (Presses the BuyMax button for Dimensions.) | !{0} maxTick # (Presses the BuyMax button for Tickspeed.) | These first five are only valid if you are on the main game section of the module. | !{0} change (Presses the button on the bottom to change the screen.) | !{0} upgrade [1-7] (Presses the upgrade from 1 to 7, and must be on the upgrade screen.) | !{0} boost (Presses the boost button, must be on the dim boost page.)";
 #pragma warning restore 414
     IEnumerator ProcessTwitchCommand(string command)
     {
         string[] parameters = command.Split(' ');
-        if (Regex.IsMatch(parameters[0], @"^\s*Dim|tick|buyMax|buyTick\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
-        {   
+        if (Regex.IsMatch(parameters[0], @"^\s*(dim|dimx10|tick|buyMax|maxTick)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
             yield return null;
 			int l = parameters.Length;
 			if (l < 2) {
@@ -691,7 +691,7 @@ public class AntimatterDims : MonoBehaviour {
 			else{
 				int j = 0;
 				int.TryParse(parameters[1], out j);
-				if (j >= 1 && j <= 8) Upgrades[j-1].OnInteract();
+				if (j >= 1 && j <= 7) Upgrades[j-1].OnInteract();
 				else yield return "sendtochaterror Either too small or too large!";
 			}
 		}
